@@ -1,0 +1,4 @@
+int64 ball_num
+int64 rev
+---
+string command

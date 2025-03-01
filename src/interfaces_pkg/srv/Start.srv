@@ -1,0 +1,4 @@
+# Start.srv
+string command
+---
+bool success
