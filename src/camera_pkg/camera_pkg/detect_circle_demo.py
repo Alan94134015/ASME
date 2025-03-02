@@ -37,6 +37,7 @@ class CameraDemo(Node):
             # Convert ROS image message to OpenCV image
             roi_image = self.bridge.imgmsg_to_cv2(image_msg.roi_image, "bgr8")
 
+            # cv2.namedWindow("detect_circle", cv2.WINDOW_OPENGL)
             gray = cv2.cvtColor(roi_image, cv2.COLOR_BGR2GRAY)
             blurred = cv2.GaussianBlur(gray, (11, 11), 0)
             circles = cv2.HoughCircles(blurred, cv2.HOUGH_GRADIENT, dp=1.2, minDist=30, param1=50, param2=30, minRadius=10, maxRadius=70)

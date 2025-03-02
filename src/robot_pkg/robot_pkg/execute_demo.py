@@ -11,10 +11,11 @@ class StartProgramService(Node):
 
     def start_program_callback(self, request, response):
         try:
-            if request.command == 'move':
+            if request.command == 'classfy':
                 # 執行另一個 ROS 2 package 的節點
                 subprocess.Popen(["ros2", "launch", "camera_pkg", "camera_launch.py"])
                 subprocess.Popen(["ros2", "run", "robot_pkg", "step_motor"])
+                subprocess.Popen(["ros2", "run", "robot_pkg", "servo"])
                 response.success = True
             
         except Exception as e:
