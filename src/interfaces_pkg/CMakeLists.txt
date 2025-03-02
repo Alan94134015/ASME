@@ -14,6 +14,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CvImage.msg"
   "srv/StepMotor.srv"
   "srv/Start.srv"
+  "srv/ServoSrv.srv"
+  "srv/Image.srv"
   DEPENDENCIES sensor_msgs
 )
 ament_export_dependencies(rosidl_default_runtime)

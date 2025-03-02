@@ -1,0 +1,3 @@
+# Image.srv
+---
+sensor_msgs/Image roi_image
