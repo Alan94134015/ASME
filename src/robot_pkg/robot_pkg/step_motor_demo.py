@@ -21,7 +21,7 @@ class StepMotorService(Node):
         if request.ball_num == 1:
             GPIO.output(2, False)  # Set clockwise rotation
 
-            for i in range(request.rev):
+            for i in range(20):
                 GPIO.output(3, True)
                 sleep(0.001)
                 GPIO.output(3, False)
@@ -31,7 +31,7 @@ class StepMotorService(Node):
         else:
             GPIO.output(2, True)  # Set counterclockwise rotation
 
-            for i in range(request.rev):
+            for i in range(100):
                 GPIO.output(3, True)
                 sleep(0.001)
                 GPIO.output(3, False)

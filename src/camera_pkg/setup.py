@@ -25,7 +25,8 @@ setup(
         'console_scripts': [
             'camera = camera_pkg.camera_demo:main',
             'detect_circle = camera_pkg.detect_circle_demo:main',
-            'detect_color = camera_pkg.detect_color_demo:main'
+            'detect_color = camera_pkg.detect_color_demo:main',
+            'detect_ball = camera_pkg.detect_ball_demo:main'
         ],
     },
 )

@@ -28,7 +28,7 @@ class CameraDemo(Node):
             try:
                 roi_frame = frame[roi_top:roi_bottom, roi_left:roi_right]
                 response.roi_image = self.bridge.cv2_to_imgmsg(roi_frame, "bgr8")
-                self.get_logger().info("成功擷取影像")
+                # self.get_logger().info("成功擷取影像")
 
             except CvBridgeError as e:
                 self.get_logger().error(f"CvBridge 錯誤: {e}")
