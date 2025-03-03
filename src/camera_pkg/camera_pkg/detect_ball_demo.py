@@ -34,7 +34,7 @@ class CameraDemo(Node):
         self.req_servo = ServoSrv.Request()
 
         self.bridge = CvBridge()
-        self.radius = []
+        self.radius = list()
         self.color = str()
 
     # 發出擷取照片的請求
@@ -44,18 +44,24 @@ class CameraDemo(Node):
     
     # 發出轉動步進馬達的要求
     def send_request_to_stepMotor(self, num):
-        self.req_motor.ball_num = num
+        try:
+            self.req_motor.ball_num = num
 
-        future = self.cli_motor.call_async(self.req_motor)
-        return future
+            future = self.cli_motor.call_async(self.req_motor)
+            return future
+        except Exception as e:
+            self.get_logger().error(f'Error in send_request_to_stepMotor: {e}')
     
     # 發送轉動伺服馬達的要求
     def send_request_to_servo(self):
-        self.req_servo.color = self.color
-        self.req_servo.radius = min(self.radius)
+        try:
+            self.req_servo.color = self.color
+            self.req_servo.radius = int(min(self.radius))
+            future = self.cli_servo.call_async(self.req_servo)
 
-        future = self.cli_motor.call_async(self.req_motor)
-        return future
+            return future
+        except Exception as e:
+            self.get_logger().error(f'Error in send_request_to_servo: {e}')
 
     # 辨識圓形
     def detect_circle(self, image):
@@ -137,8 +143,7 @@ def main():
         future_motor = camera.send_request_to_stepMotor(len(camera.radius))
         rclpy.spin_until_future_complete(camera, future_motor)
 
-        sleep(1)
-        
+        sleep(0.01)
 
     camera.destroy_node()
     rclpy.shutdown()

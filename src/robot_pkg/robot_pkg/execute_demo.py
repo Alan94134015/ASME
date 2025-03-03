@@ -17,6 +17,9 @@ class StartProgramService(Node):
                 subprocess.Popen(["ros2", "run", "robot_pkg", "step_motor"])
                 subprocess.Popen(["ros2", "run", "robot_pkg", "servo"])
                 response.success = True
+            elif request.command == 'move':
+                subprocess.Popen(["ros2", "run", "robot_pkg", "chassis"])
+
             
         except Exception as e:
             self.get_logger().error(f"Failed to start the program: {e}")

@@ -17,9 +17,11 @@ class CameraDemo(Node):
 
         self.srv = self.create_service(Image, '/image_capture_service', self.image_callback)
 
-        self.video = cv2.VideoCapture(0, cv2.CAP_V4L2)
+        self.video = cv2.VideoCapture(1, cv2.CAP_V4L2)
         self.bridge = CvBridge()
 
+        self.get_logger().info("相機已經啟動")
+        
     # 定義相機擷取畫面上傳到topic
     def image_callback(self, request, response):
         ret, frame = self.video.read()

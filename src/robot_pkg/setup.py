@@ -24,7 +24,8 @@ setup(
             'step_motor = robot_pkg.step_motor_demo:main',
             'bottom = robot_pkg.bottom_demo:main',
             'execute = robot_pkg.execute_demo:main',
-            'servo = robot_pkg.servo_demo:main'
+            'servo = robot_pkg.servo_demo:main',
+            'chassis = robot_pkg.chassis_demo:main'
         ],
     },
 )

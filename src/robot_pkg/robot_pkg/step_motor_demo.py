@@ -16,8 +16,10 @@ class StepMotorService(Node):
     def __init__(self):
         super().__init__('step_motor_node')
         self.srv = self.create_service(StepMotor, '/rotation_service', self.request_callback)
+        self.get_logger().info('步進馬達連接腸功')
 
     def request_callback(self, request, response):
+        self.get_logger().info(f"我偵測到{request.ball_num} 顆球")
         if request.ball_num == 1:
             GPIO.output(2, False)  # Set clockwise rotation
 
@@ -26,9 +28,9 @@ class StepMotorService(Node):
                 sleep(0.001)
                 GPIO.output(3, False)
                 sleep(0.001)
-            
             response.command = "clockwise"
-        else:
+
+        elif request.ball_num > 1:
             GPIO.output(2, True)  # Set counterclockwise rotation
 
             for i in range(100):
@@ -38,7 +40,15 @@ class StepMotorService(Node):
                 sleep(0.001)
             response.command = "counterclockwise"
         
-        self.get_logger().info(response.command)
+        elif request.ball_num == 0:
+            for i in range(20):
+                GPIO.output(3, True)
+                sleep(0.001)
+                GPIO.output(3, False)
+                sleep(0.001)
+            response.command = "clockwise"
+        
+        self.get_logger().info(f"我的運轉方向是{response.command}")
         return response
         
     def destroy_node(self):
