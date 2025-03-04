@@ -13,7 +13,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CvImage.msg"
   "srv/StepMotor.srv"
-  "srv/Start.srv"
+  "srv/Action.srv"
   "srv/ServoSrv.srv"
   "srv/Image.srv"
   "srv/Chassis.srv"

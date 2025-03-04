@@ -17,12 +17,12 @@ class CameraDemo(Node):
         super().__init__('camera_node')
 
         self.srv = self.create_service(Image, '/image_capture_service', self.image_callback)
-        self.cli = self.create_service(Chassis, '/image_capture_to_chassis_service', self.callback_to_chassis)
+        self.srv_chassis = self.create_service(Chassis, '/image_capture_to_chassis_service', self.callback_to_chassis)
 
         self.video = cv2.VideoCapture(0, cv2.CAP_V4L2)
         self.bridge = CvBridge()
 
-        self.get_logger().info("相機已經啟動")
+        self.get_logger().warn("相機已經啟動")
 
 
     # 定義相機擷取給底盤
@@ -31,7 +31,6 @@ class CameraDemo(Node):
 
         if ret:
             try:
-                response.image = self.bridge.cv2_to_imgmsg(frame, "bgr8")
                 self.get_logger().info("成功擷取影像")
 
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
