@@ -8,16 +8,10 @@ def generate_launch_description():
         output='screen',
     )
 
-    detect_circle_node = Node(
+    detect_ball_node = Node(
         package='camera_pkg',
-        executable='detect_circle',
+        executable='detect_ball',
         output='screen',
     )
 
-    detect_color_node = Node(
-        package='camera_pkg',
-        executable='detect_color',
-        output='screen',
-    )
-
-    return LaunchDescription([camera, detect_circle_node, detect_color_node])
+    return LaunchDescription([camera, detect_ball_node])

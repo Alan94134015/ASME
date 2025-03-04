@@ -36,7 +36,7 @@ class CameraDemo(Node):
         self.bridge = CvBridge()
         self.radius = list()
         self.color = str()
-
+        
     # 發出擷取照片的請求
     def send_request_to_camera(self):
         future = self.cli_image.call_async(self.req_image)
@@ -143,7 +143,7 @@ def main():
         future_motor = camera.send_request_to_stepMotor(len(camera.radius))
         rclpy.spin_until_future_complete(camera, future_motor)
 
-        sleep(0.01)
+        sleep(1)
 
     camera.destroy_node()
     rclpy.shutdown()

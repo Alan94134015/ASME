@@ -17,14 +17,15 @@ class Bottom(Node):
         GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         while not self.cli.wait_for_service(timeout_sec=2.0):
-            self.get_logger().info('/bottom_service not available, waitting againg')
+            self.get_logger().info('等待移動服務開啟')
         
         while GPIO.input(BUTTON_PIN) == GPIO.HIGH:
             sleep(0.1)
 
 
-        self.get_logger().info("Button pressed! Sending service request...")
+        self.get_logger().info("按下按鈕傳送移動要求")
         self.send_request("move")
+        self.destroy_node()
 
     def send_request(self, request):
         req = Start.Request()
@@ -38,7 +39,6 @@ class Bottom(Node):
 def main():
     rclpy.init()
     node = Bottom()
-    node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':

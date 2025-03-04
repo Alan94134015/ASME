@@ -1,40 +1,36 @@
-# robot_demo
-# 偵測按紐的程式碼
+#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from interfaces_pkg.srv import Start
+import subprocess
 
-import RPi.GPIO as GPIO
-
-class Buttom(Node):
+class StartProgramService(Node):
     def __init__(self):
-        super().__init__('robot_node')
-        GPIO.setmode(GPIO.BCM)  # 或者 GPIO.BOARD
-        self.pub = self.create_publisher(String, '/start_service', 2)
-        # 设置GPIO引脚
-        GPIO.setup(2, GPIO.IN)
+        super().__init__('start_program_service')
+        self.srv = self.create_service(Start, '/start_service', self.start_program_callback)
 
-    def timer_callback(self):
-        if GPIO.input(2) == True:
-           self.msg.data = 'run'
-           self.get_logger().info('the robot is moving')
-        else:
-           self.get_logger().info('the robot stop')
-           self.msg.data = 'stop'
+    def start_program_callback(self, request, response):
+        try:
+            if request.command == 'classfy':
+                # 執行另一個 ROS 2 package 的節點
+                subprocess.Popen(["ros2", "launch", "camera_pkg", "camera_launch.py"])
+                subprocess.Popen(["ros2", "run", "robot_pkg", "step_motor"])
+                subprocess.Popen(["ros2", "run", "robot_pkg", "servo"])
+                response.success = True
+                
+            elif request.command == 'move':
+                subprocess.Popen(["ros2", "run", "robot_pkg", "chassis"])
 
-        self.pub.publish(self.msg)
-
-    def destroy_node(self):
-        super().destroy_node()
-        GPIO.cleanup()      
+            
+        except Exception as e:
+            self.get_logger().error(f"Failed to start the program: {e}")
+            response.success = False
+        return response
 
 def main():
     rclpy.init()
-    robot = Buttom()
-    while GPIO.input(2):
-        rclpy.spin_once(robot)
-    robot.get_logger().info('the robot arrived the target place')
-    robot.destroy_node()
+    node = StartProgramService()
+    rclpy.spin(node)
     rclpy.shutdown()
 
 if __name__ == '__main__':
