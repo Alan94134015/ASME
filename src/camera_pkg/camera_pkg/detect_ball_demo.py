@@ -22,11 +22,11 @@ class CameraDemo(Node):
         self.cli_servo = self.create_client(ServoSrv, 'servo_service')
         
         while not self.cli_image.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('等待影像服務啟動...')
+            self.get_logger().warn('等待影像服務啟動...')
         while not self.cli_motor.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('等待步進馬達服務啟動...')
+            self.get_logger().warn('等待步進馬達服務啟動...')
         while not self.cli_servo.wait_for_service(timeout_sec=1.0):
-            self.get_logger().info('等待伺服馬達服務啟動...')
+            self.get_logger().warn('等待伺服馬達服務啟動...')
         
         # 定義傳送資料
         self.req_image = Image.Request()

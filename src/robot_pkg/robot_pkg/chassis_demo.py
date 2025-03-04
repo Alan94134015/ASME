@@ -4,6 +4,7 @@ from rclpy.node import Node
 import RPi.GPIO as GPIO
 
 from interfaces_pkg.srv import Chassis, ServoSrv, Action
+from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -45,6 +46,8 @@ def main():
         
         result = future.result()
         chassis.get_logger().info(f"left_speed: {result.left_speed}, right_speed: {result.right_speed}.")
+
+        sleep(0.1)
 
     future = chassis.send_req_to_action()
     rclpy.spin_until_future_complete(chassis, future)
