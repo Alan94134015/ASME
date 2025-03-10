@@ -1,19 +1,19 @@
 import rclpy
 from rclpy.node import Node
 
-from gpiozero import Servo
-from interfaces_pkg.srv import ServoSrv
-
-from gpiozero import Servo
+from interfaces_pkg.srv import ServoSrv, Arduino
 
 class MinimalServo(Node):
     def __init__(self):
         super().__init__('servo_node')
-        self.servo = Servo(5)
-        self.servo.value = self.convert_angle(40)
 
         self.srv = self.create_service(ServoSrv, '/servo_service', self.trigger_servo)
-        self.get_logger().info('伺服馬達連接腸功')
+        self.cli = self.create_client(Arduino, '/arduino_service')
+        while not self.cli.wait_for_service(timeout_sec=1):
+            self.get_logger().warn('等待arduino伺服連接')
+
+        self.get_logger().info('伺服馬達連接成功')
+        self.req_servo = ServoSrv.Request()
     
     def trigger_servo(self, request, response):
         try:
@@ -32,12 +32,27 @@ class MinimalServo(Node):
             elif request.color == 'stainless steel' and 11 < request.radius < 13:
                 angle = 140
 
-            self.servo.value = self.convert_angle(angle)    
+            future = self.send_req_to_arduino(angle)
+            rclpy.spin_until_future_complete(self, future)
+            
+            if future.result() is not None:
+                response = future.result().msg
+            else:
+                self.get_logger().error('Service call failed')
+                response.msg = "Failed"
+
         except Exception as e:
-            pass
+            self.get_logger().error(f"Error in trigger_servo: {e}")
+            response.msg = "Failed"
 
         return response
     
+    def send_req_to_arduino(self, angle):
+        req = Arduino.Request()
+        req.command = f"MOVE {angle}"
+        future = self.cli.call_async(req)
+        return future
+
     def convert_angle(self, angle):
         return float((angle - 90) / 90)
         

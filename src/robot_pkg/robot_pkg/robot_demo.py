@@ -15,6 +15,7 @@ class StartProgramService(Node):
         try:
             if request.command == 'classfy':
                 # 執行另一個 ROS 2 package 的節點
+                subprocess.Popen(["ros2", "run", "camera_pkg", "camera"])
                 subprocess.Popen(["ros2", "run", "camera_pkg", "detect_ball"])
                 subprocess.Popen(["ros2", "run", "robot_pkg", "step_motor"])
                 subprocess.Popen(["ros2", "run", "robot_pkg", "servo"])
@@ -36,7 +37,6 @@ class StartProgramService(Node):
 def main():
     rclpy.init()
     node = StartProgramService()
-    subprocess.Popen(["ros2", "run", "camera_pkg", "camera"])
     subprocess.Popen(["ros2", "run", "robot_pkg", "bottom"])
     rclpy.spin(node)    
     rclpy.shutdown()

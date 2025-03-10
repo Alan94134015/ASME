@@ -19,7 +19,7 @@ class CameraDemo(Node):
         super().__init__('detect_ball_node')
         self.cli_image = self.create_client(Image, '/image_capture_service')
         self.cli_motor = self.create_client(StepMotor, '/rotation_service')
-        self.cli_servo = self.create_client(ServoSrv, 'servo_service')
+        self.cli_servo = self.create_client(ServoSrv, '/servo_service')
         
         while not self.cli_image.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn('等待影像服務啟動...')
