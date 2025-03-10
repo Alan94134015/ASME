@@ -36,7 +36,9 @@ class StartProgramService(Node):
 def main():
     rclpy.init()
     node = StartProgramService()
-    rclpy.spin(node)
+    subprocess.Popen(["ros2", "run", "camera_pkg", "camera"])
+    subprocess.Popen(["ros2", "run", "robot_pkg", "bottom"])
+    rclpy.spin(node)    
     rclpy.shutdown()
 
 if __name__ == '__main__':

@@ -86,11 +86,8 @@ class CameraDemo(Node):
             for (x, y, r) in circles:
                 cv2.circle(roi_image, (x, y), r, (0, 255, 0), 2)
                 self.radius.append(r)
-        try:
-            cv2.imshow('detect_circle', roi_image)
-            cv2.waitKey(1)
-        except:
-            pass
+
+        return self.radius
 
     # 辨識顏色
     def detect_color(self, image):
@@ -133,7 +130,9 @@ def main():
         rclpy.spin_until_future_complete(camera, future_image)
         # 辨識球徑大小及數量顏色
         req_image = future_image.result()
+        
         camera.detect_circle(req_image.roi_image)
+            
         camera.detect_color(req_image.roi_image)
         # 發出轉動伺服馬達的請求
         if camera.radius:

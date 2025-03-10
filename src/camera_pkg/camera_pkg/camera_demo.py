@@ -16,16 +16,16 @@ class CameraDemo(Node):
     def __init__(self):
         super().__init__('camera_node')
 
+        # 定義擷取照片的服務
         self.srv = self.create_service(Image, '/image_capture_service', self.image_callback)
         self.srv_chassis = self.create_service(Chassis, '/image_capture_to_chassis_service', self.callback_to_chassis)
 
-        self.video = cv2.VideoCapture(0, cv2.CAP_V4L2)
+        self.video = cv2.VideoCapture(1, cv2.CAP_V4L2)
         self.bridge = CvBridge()
 
         self.get_logger().warn("相機已經啟動")
 
-
-    # 定義相機擷取給底盤
+    # 定義相機擷取給底盤 走直線
     def callback_to_chassis(self, request, response):
         ret, frame = self.video.read()
 
@@ -47,8 +47,8 @@ class CameraDemo(Node):
                     response.left_speed = cx
                     response.right_speed = cy
                 
-                cv2.imshow('video', mask)
-                cv2.waitKey(1)
+                # cv2.imshow('video', mask)
+                # cv2.waitKey(1)
 
             except CvBridgeError as e:
                 self.get_logger().error(f"CvBridge 錯誤: {e}")
@@ -78,7 +78,7 @@ def main():
     rclpy.spin(camera)
     camera.destroy_node()
     rclpy.shutdown()
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     main()
